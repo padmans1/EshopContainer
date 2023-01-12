@@ -1,4 +1,7 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands;
+﻿using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.ComponentModel.Design;
+
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands;
 
 /// <summary>
 /// Provides a base implementation for handling duplicate request and ensuring idempotent updates, in the cases where
@@ -98,8 +101,10 @@ public class IdentifiedCommandHandler<T, R> : IRequestHandler<IdentifiedCommand<
 
                 return result;
             }
-            catch
+            catch(Exception ex)
             {
+                _logger.LogInformation(
+                  "----- Command Err: {@Result}",ex.Message);
                 return default(R);
             }
         }
